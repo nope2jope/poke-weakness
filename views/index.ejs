@@ -12,9 +12,9 @@
             <% if (locals.data) { %>
             <h5 class="card-title"><%= data.pName %></h5>
             <% if (locals.data.pTypes.pTypeTwo !== "") {%>
-            <p class="card-text"><%= data.pName %> is a dual-type <%= data.pTypes.pTypeOne %>/<%= data.pTypes.pTypeTwo %> Pokemon.</p>
+            <p class="card-text"><%= data.pName %> is a dual-type <img src=<%= data.pTypes.pTypeOneIcon %>>/<img src=<%= data.pTypes.pTypeTwoIcon %>> Pokemon.</p>
             <% } else if (locals.data.pTypes.pTypeTwo === "") { %>
-            <p class="card-text"><%= data.pName %> is a <%= data.pTypes.pTypeOne %>-type pokemon.</p>
+            <p class="card-text"><%= data.pName %> is a <img src=<%= data.pTypes.pTypeOneIcon %>>-type pokemon.</p>
         </div>
             <% } %>
             <% } %>
