@@ -1,27 +1,32 @@
 <%- include("partials/header.ejs") %>
+    <main class="container">
+        <div class="row card-container">
+                <div class="card center">
+                    <h4>What are my weaknesses?</h4>
+                    <% if (locals.data) { %>
+                        <img src=<%=data.pSprite %> class="card-img" alt="<%= data.pName %>">
+                            <% } %>
+                                <% if (locals.data) { %>
+                                    <h5><%= data.pName %>'s type is:</h5>
+                                    <% if (locals.data.pTypes.pTypeTwo !=="" ) {%>
+                                        <img src=<%=data.pTypes.pTypeOneIcon %>>
+                                        <img src=<%=data.pTypes.pTypeTwoIcon %>>
+                                        <% } else if (locals.data.pTypes.pTypeTwo==="" ) { %>
+                                            <img src=<%=data.pTypes.pTypeOneIcon %>>
+                                            <% } %>
+                                                <% } else { %>
+                                                    <img src="assets/bug-type.png">
+                                                    <% } %>
+                                                        <div class="card-footer text-muted">
+                                                            <form action="/" method="POST">
+                                                                <input type="text" name="pokemonName"
+                                                                    placeholder="ex. Bulbasaur">
+                                                                <input type="submit" value="Search">
+                                                            </form>
+                                                        </div>
+                </div>
+        </div>
 
-<main class="container">
-    <div class="card text-center" style="width: 20rem;">
-        <div class="card-header">
-            <h6>What are my weaknesses?</h6>
-        </div>
         <% if (locals.data) { %>
-        <img src=<%= data.pSprite %> class="card-img-top" alt="<%= data.pName %>">
-        <% } %>
-        <div class="card-body">
-            <% if (locals.data) { %>
-            <h5 class="card-title"><%= data.pName %></h5>
-            <% if (locals.data.pTypes.pTypeTwo !== "") {%>
-            <p class="card-text"><%= data.pName %> is a dual-type <img src=<%= data.pTypes.pTypeOneIcon %>>/<img src=<%= data.pTypes.pTypeTwoIcon %>> Pokemon.</p>
-            <% } else if (locals.data.pTypes.pTypeTwo === "") { %>
-            <p class="card-text"><%= data.pName %> is a <img src=<%= data.pTypes.pTypeOneIcon %>>-type pokemon.</p>
-        </div>
+
             <% } %>
-            <% } %>
-        <div class="card-footer text-muted">
-            <form action="/" method="POST">
-                <input type="text" name="pokemonName" placeholder="ex. Bulbasaur">
-                <input type="submit" value="Search">
-            </form>
-        </div>
-    </div>
