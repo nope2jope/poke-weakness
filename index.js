@@ -6,71 +6,64 @@ const port = 3000;
 const endpointName = "https://pokeapi.co/api/v2/pokemon/";
 const endpointType = "https://pokeapi.co/api/v2/type/";
 
-const typeIcons = {
-  bug : "assets/bug-type.png",
-  dark : "assets/dark-type.png",
-  dragon : "assets/dragon-type.png",
-  electric : "assets/electric-type.png",
-  fairy : "assets/fairy-type.png",
-  fighting : "assets/fighting-type.png",
-  fire : "assets/fire-type.png",
-  flying : "assets/flying-type.png",
-  ghost : "assets/ghost-type.png",
-  grass : "assets/grass-type.png",
-  ground : "assets/ground-type.png",
-  ice : "assets/ice-type.png",
-  normal : "assets/normal-type.png",
-  poison : "assets/poison-type.png",
-  psychic : "assets/psychic-type.png",
-  rock : "assets/rock-type.png",
-  steel : "assets/steel-type.png",
-  water : "assets/water-type.png",
+const vulnerabilityTemplate = {
+  bug: 1,
+  dark: 1,
+  dragon: 1,
+  electric: 1,
+  fairy: 1,
+  fighting: 1,
+  fire: 1,
+  flying: 1,
+  ghost: 1,
+  grass: 1,
+  ground: 1,
+  ice: 1,
+  normal: 1,
+  poison: 1,
+  psychic: 1,
+  rock: 1,
+  steel: 1,
+  water: 1,
+}
+const multiplierTemplate = {
+  fourX: false,
+  twoX: false,
+  oneX: false,
+  pointFiveX: false,
+  pointTwoFiveX: false,
+  zeroX: false,
 }
 
-const vulnerabilityTemplate = {
-  bug : 1,
-  dark : 1,
-  dragon : 1,
-  electric : 1,
-  fairy : 1,
-  fighting : 1,
-  fire : 1,
-  flying : 1,
-  ghost : 1,
-  grass : 1,
-  ground : 1,
-  ice : 1,
-  normal : 1,
-  poison : 1,
-  psychic : 1,
-  rock : 1,
-  steel : 1,
-  water : 1,
-}
+function resetTemplates() {
+  for (let key in vulnerabilityTemplate) {
+    vulnerabilityTemplate[key] = 1;
+  };
+  for (let key in multiplierTemplate) {
+    multiplierTemplate[key] = false;
+  };
+};
 
 async function checkType(u, n) {
   const response = await axios.get(u + n);
   const result = response.data;
   const pokeSprite = result.sprites.front_default;
   const typeOne = result.types[0].type.name;
-  const typeOneIcon = typeIcons[typeOne]
   if (result.types[1]) {
     var typeTwo = result.types[1].type.name;
-    var typeTwoIcon = typeIcons[typeTwo];
   }
-  else { 
+  else {
     var typeTwo = "";
-    var typeTwoIcon = "";
-   };
-return { 
-  pName : n,
-  pSprite : pokeSprite,
-  pTypes : { 
-    pTypeOne : typeOne,
-    pTypeTwo : typeTwo,
-    pTypeOneIcon : typeOneIcon,
-    pTypeTwoIcon : typeTwoIcon}
-}};
+  };
+  return {
+    pName: n,
+    pSprite: pokeSprite,
+    pTypes: {
+      pTypeOne: typeOne,
+      pTypeTwo: typeTwo,
+    }
+  }
+};
 
 async function checkTypeWeaknesses(u, t) {
   var dbl = [];
@@ -91,52 +84,82 @@ async function checkTypeWeaknesses(u, t) {
   })
 
   return {
-    d: dbl, 
+    d: dbl,
     h: hlf,
-    i: imn};
+    i: imn
+  };
 };
 
 function mergeObjects(objA, objB) {
   return {
-    d : objA.d.concat(objB.d),
-    h : objA.h.concat(objB.h),
-    i : objA.i.concat(objB.i)
+    d: objA.d.concat(objB.d),
+    h: objA.h.concat(objB.h),
+    i: objA.i.concat(objB.i)
   };
 };
 
 function calculateVulnerability(template, data) {
-  for (var key in template) {
+  const t = template;
+  for (var key in t) {
     for (var a = 0; a < data.d.length; a++) {
-        if (key === data.d[a]) {
-            template[key] *= 2;
-        }
+      if (key === data.d[a]) {
+        t[key] *= 2;
+      }
     }
     for (var a = 0; a < data.h.length; a++) {
-        if (key === data.h[a]) {
-            template[key] *= .5;
-        }
+      if (key === data.h[a]) {
+        t[key] *= .5;
+      }
     }
     for (var a = 0; a < data.i.length; a++) {
-        if (key === data.i[a]) {
-            template[key] *= 0;
-        }
+      if (key === data.i[a]) {
+        t[key] *= 0;
+      }
     }
-}
-return template;
+  }
+  return t;
+};
+
+function checkMultipliers(t, d) {
+  const template = t;
+  for (let key in d) {
+    switch (d[key]) {
+      case 4:
+        template.fourX = true;
+        break;
+      case 2: 
+        template.twoX = true;
+        break;
+      case 1:
+        template.oneX = true;
+        break;
+      case .5:
+        template.pointFiveX = true;
+        break;
+      case .25: 
+        template.pointTwoFiveX = true;
+        break;
+      case 0:
+        template.zeroX = true;
+        break;
+      }
+  }
+  return template;
 };
 
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 
-app.get("/", (req, res) => {    
-    res.render("index.ejs");
+app.get("/", (req, res) => {
+  res.render("index.ejs");
 });
 
 app.post("/", async (req, res) => {
-    const searchTerm = req.body.pokemonName.toLowerCase();
+  const searchTerm = req.body.pokemonName.toLowerCase();
 
-    try {
-    var pokeType = await checkType(endpointName, searchTerm);
+  try {
+    resetTemplates();
+    const pokeType = await checkType(endpointName, searchTerm);
     var typeWeakness = await checkTypeWeaknesses(endpointType, pokeType.pTypes.pTypeOne);
 
     if (pokeType.pTypes.pTypeTwo !== "") {
@@ -144,21 +167,23 @@ app.post("/", async (req, res) => {
       typeWeakness = mergeObjects(typeWeakness, typeWeaknessB);
     };
 
-    var pokeWeaknesses = calculateVulnerability(vulnerabilityTemplate, typeWeakness);
+    const pokeWeaknesses = calculateVulnerability(vulnerabilityTemplate, typeWeakness);
+    const pokeMultipliers = checkMultipliers(multiplierTemplate, pokeWeaknesses);
 
-    res.render("index.ejs", { 
-      typeData : pokeType,
-      weaknessData : pokeWeaknesses
+    res.render("index.ejs", {
+      typeData: pokeType,
+      weaknessData: pokeWeaknesses,
+      multiplierData: pokeMultipliers,
     });
 
-    } catch (error) {
-      console.error("Failed to make request:", error.message);
-      res.render("index.ejs", {
-        error: error.message,
-      });
-    }
+  } catch (error) {
+    console.error("Failed to make request:", error.message);
+    res.render("index.ejs", {
+      error: error.message,
+    });
+  }
 });
 
 app.listen(port, () => {
-    console.log(`Application is listening on ${port}`)
+  console.log(`Application is listening on ${port}`)
 });

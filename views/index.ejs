@@ -1,7 +1,8 @@
 <%- include("partials/header.ejs") %>
     <main class="container">
         <div class="row card-container">
-            <div class="col-12">
+            <div class="col-2"></div>
+            <div class="col-8">
                 <div class="card center">
                     <div class="card-header">
                         <h4>What are my weaknesses?</h4>
@@ -12,7 +13,7 @@
                     </div>
                     <div class="card-body">
                         <% if (!locals.typeData) { %>
-                            <img src="assets/bug-type.png">
+                            <img class="card-img" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/132.png">
                             <% } %>
                                 <% if (locals.typeData) { %>
                                     <img src=<%=typeData.pSprite %> class="card-img" alt="<%= typeData.pName %>">
@@ -21,29 +22,63 @@
                                                 <h5>
                                                     <%= typeData.pName %>'s type is:
                                                 </h5>
-                                                <% if (locals.typeData.pTypes.pTypeTwo !=="" ) {%>
-                                                    <img src=<%=typeData.pTypes.pTypeOneIcon %>>
-                                                    <img src=<%=typeData.pTypes.pTypeTwoIcon %>>
-                                                    <% } else if (locals.typeData.pTypes.pTypeTwo==="" ) { %>
-                                                        <img src=<%=typeData.pTypes.pTypeOneIcon %>>
+                                                <img src=<%=`assets/${typeData.pTypes.pTypeOne}-type.png`%>>
+                                                <% if (locals.typeData.pTypes.pTypeTwo !=="" ) { %>
+                                                    <img src=<%=`assets/${typeData.pTypes.pTypeTwo}-type.png` %>>
+                                                    <% } %>
                                                         <% } %>
-                                                            <% } %>
                     </div>
 
-                <div class="card-footer">
-
-                    <% if (locals.weaknessData) { %>
-                        <% for (key in locals.weaknessData) { %>
-                            <% if (locals.weaknessData[key] === 1) { %>
-                                <img src=<%=`assets/${key}-type.png` %>>
+                    <div class="card-footer">
+                        <% if (locals.weaknessData) { %>
+                            <% if (locals.multiplierData.fourX === true) { %>
+                            <div class="row">
+                                <div class="col-2">4x</div>
+                                <div class="col-10">Types</div>
+                            </div>
+                            <hr>
+                            <% } %>
+                            <% if (locals.multiplierData.twoX === true) { %>
+                            <div class="row">
+                                <div class="col-2">2x</div>
+                                <div class="col-10">Types</div>
+                            </div>
+                            <hr>
+                            <% } %>
+                            <% if (locals.multiplierData.oneX === true) { %>
+                            <div class="row">
+                                <div class="col-2">1x</div>
+                                <div class="col-10">Types</div>
+                            </div>
+                            <hr>
+                            <% } %>
+                            <% if (locals.multiplierData.pointFiveX === true) { %>
+                            <div class="row">
+                                <div class="col-2">.5x</div>
+                                <div class="col-10">Types</div>
+                            </div>
+                            <hr>
+                            <% } %>
+                            <% if (locals.multiplierData.pointTwoFiveX === true) { %>
+                            <div class="row">
+                                <div class="col-2">.25x</div>
+                                <div class="col-10">Types</div>
+                            </div>
+                            <hr>
+                            <% } %>
+                            <% if (locals.multiplierData.zeroX === true) { %>
+                            <div class="row">
+                                <div class="col-2">0x</div>
+                                <div class="col-10">Types</div>
+                            </div>
+                            <hr>
+                            <% } %>
                         <% } %>
-                        <% } %>
-                        <% } %>
-
+                        <% if (!locals.weaknessData) { %>
+                            <div></div>
+                            <% } %>
+                    </div>
                 </div>
-                
             </div>
+            <div class="col-2"></div>
             </div>
-        </div>
-        </div>
-
