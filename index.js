@@ -27,7 +27,7 @@ const typeIcons = {
   water : "assets/water-type.png",
 }
 
-const typeVulnerabilities = {
+const vulnerabilityTemplate = {
   bug : 1,
   dark : 1,
   dragon : 1,
@@ -91,9 +91,38 @@ async function checkTypeWeaknesses(u, t) {
   })
 
   return {
-    double: dbl, 
-    half: hlf,
-    immune: imn};
+    d: dbl, 
+    h: hlf,
+    i: imn};
+};
+
+function mergeObjects(objA, objB) {
+  return {
+    d : objA.d.concat(objB.d),
+    h : objA.h.concat(objB.h),
+    i : objA.i.concat(objB.i)
+  };
+};
+
+function calculateVulnerability(template, data) {
+  for (var key in template) {
+    for (var a = 0; a < data.d.length; a++) {
+        if (key === data.d[a]) {
+            template[key] *= 2;
+        }
+    }
+    for (var a = 0; a < data.h.length; a++) {
+        if (key === data.h[a]) {
+            template[key] *= .5;
+        }
+    }
+    for (var a = 0; a < data.i.length; a++) {
+        if (key === data.i[a]) {
+            template[key] *= 0;
+        }
+    }
+}
+return template;
 };
 
 app.use(express.static("public"));
@@ -105,17 +134,23 @@ app.get("/", (req, res) => {
 
 app.post("/", async (req, res) => {
     const searchTerm = req.body.pokemonName.toLowerCase();
+
     try {
-    var pokeData = await checkType(endpointName, searchTerm);
-    var pokeWeaknessA = await checkTypeWeaknesses(endpointType, pokeData.pTypes.pTypeOne);
-    if (pokeData.pTypes.pTypeTwo !== "") {
-      var pokeWeaknessB = await checkTypeWeaknesses(endpointType, pokeData.pTypes.pTypeTwo)
-    }
-    console.log(`${pokeData.pTypes.pTypeOne} is weak to`)
-    console.log(pokeWeaknessA);
-    console.log(`${pokeData.pTypes.pTypeTwo} is weak to`)
-    console.log(pokeWeaknessB);
-    res.render("index.ejs", { data : pokeData});
+    var pokeType = await checkType(endpointName, searchTerm);
+    var typeWeakness = await checkTypeWeaknesses(endpointType, pokeType.pTypes.pTypeOne);
+
+    if (pokeType.pTypes.pTypeTwo !== "") {
+      var typeWeaknessB = await checkTypeWeaknesses(endpointType, pokeType.pTypes.pTypeTwo);
+      typeWeakness = mergeObjects(typeWeakness, typeWeaknessB);
+    };
+
+    var pokeWeaknesses = calculateVulnerability(vulnerabilityTemplate, typeWeakness);
+
+    res.render("index.ejs", { 
+      typeData : pokeType,
+      weaknessData : pokeWeaknesses
+    });
+
     } catch (error) {
       console.error("Failed to make request:", error.message);
       res.render("index.ejs", {

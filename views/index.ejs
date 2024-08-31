@@ -1,32 +1,49 @@
 <%- include("partials/header.ejs") %>
     <main class="container">
         <div class="row card-container">
+            <div class="col-12">
                 <div class="card center">
-                    <h4>What are my weaknesses?</h4>
-                    <% if (locals.data) { %>
-                        <img src=<%=data.pSprite %> class="card-img" alt="<%= data.pName %>">
+                    <div class="card-header">
+                        <h4>What are my weaknesses?</h4>
+                        <form action="/" method="POST">
+                            <input type="text" name="pokemonName" placeholder="ex. Bulbasaur">
+                            <input type="submit" value="Search">
+                        </form>
+                    </div>
+                    <div class="card-body">
+                        <% if (!locals.typeData) { %>
+                            <img src="assets/bug-type.png">
                             <% } %>
-                                <% if (locals.data) { %>
-                                    <h5><%= data.pName %>'s type is:</h5>
-                                    <% if (locals.data.pTypes.pTypeTwo !=="" ) {%>
-                                        <img src=<%=data.pTypes.pTypeOneIcon %>>
-                                        <img src=<%=data.pTypes.pTypeTwoIcon %>>
-                                        <% } else if (locals.data.pTypes.pTypeTwo==="" ) { %>
-                                            <img src=<%=data.pTypes.pTypeOneIcon %>>
-                                            <% } %>
-                                                <% } else { %>
-                                                    <img src="assets/bug-type.png">
-                                                    <% } %>
-                                                        <div class="card-footer text-muted">
-                                                            <form action="/" method="POST">
-                                                                <input type="text" name="pokemonName"
-                                                                    placeholder="ex. Bulbasaur">
-                                                                <input type="submit" value="Search">
-                                                            </form>
-                                                        </div>
+                                <% if (locals.typeData) { %>
+                                    <img src=<%=typeData.pSprite %> class="card-img" alt="<%= typeData.pName %>">
+                                        <% } %>
+                                            <% if (locals.typeData) { %>
+                                                <h5>
+                                                    <%= typeData.pName %>'s type is:
+                                                </h5>
+                                                <% if (locals.typeData.pTypes.pTypeTwo !=="" ) {%>
+                                                    <img src=<%=typeData.pTypes.pTypeOneIcon %>>
+                                                    <img src=<%=typeData.pTypes.pTypeTwoIcon %>>
+                                                    <% } else if (locals.typeData.pTypes.pTypeTwo==="" ) { %>
+                                                        <img src=<%=typeData.pTypes.pTypeOneIcon %>>
+                                                        <% } %>
+                                                            <% } %>
+                    </div>
+
+                <div class="card-footer">
+
+                    <% if (locals.weaknessData) { %>
+                        <% for (key in locals.weaknessData) { %>
+                            <% if (locals.weaknessData[key] === 1) { %>
+                                <img src=<%=`assets/${key}-type.png` %>>
+                        <% } %>
+                        <% } %>
+                        <% } %>
+
                 </div>
+                
+            </div>
+            </div>
+        </div>
         </div>
 
-        <% if (locals.data) { %>
-
-            <% } %>
