@@ -1,84 +1,8 @@
 <%- include("partials/header.ejs") %>
     <main class="container">
-        <div class="row card-container">
-            <div class="col-2"></div>
-            <div class="col-8">
-                <div class="card center">
-                    <div class="card-header">
-                        <h4>What are my weaknesses?</h4>
-                        <form action="/" method="POST">
-                            <input type="text" name="pokemonName" placeholder="ex. Bulbasaur">
-                            <input type="submit" value="Search">
-                        </form>
-                    </div>
-                    <div class="card-body">
-                        <% if (!locals.typeData) { %>
-                            <img class="card-img" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/132.png">
-                            <% } %>
-                                <% if (locals.typeData) { %>
-                                    <img src=<%=typeData.pSprite %> class="card-img" alt="<%= typeData.pName %>">
-                                        <% } %>
-                                            <% if (locals.typeData) { %>
-                                                <h5>
-                                                    <%= typeData.pName %>'s type is:
-                                                </h5>
-                                                <img src=<%=`assets/${typeData.pTypes.pTypeOne}-type.png`%>>
-                                                <% if (locals.typeData.pTypes.pTypeTwo !=="" ) { %>
-                                                    <img src=<%=`assets/${typeData.pTypes.pTypeTwo}-type.png` %>>
-                                                    <% } %>
-                                                        <% } %>
-                    </div>
+        <div class="row center card-container">
 
-                    <div class="card-footer">
-                        <% if (locals.weaknessData) { %>
-                            <% if (locals.multiplierData.fourX === true) { %>
-                            <div class="row">
-                                <div class="col-2">4x</div>
-                                <div class="col-10">Types</div>
-                            </div>
-                            <hr>
-                            <% } %>
-                            <% if (locals.multiplierData.twoX === true) { %>
-                            <div class="row">
-                                <div class="col-2">2x</div>
-                                <div class="col-10">Types</div>
-                            </div>
-                            <hr>
-                            <% } %>
-                            <% if (locals.multiplierData.oneX === true) { %>
-                            <div class="row">
-                                <div class="col-2">1x</div>
-                                <div class="col-10">Types</div>
-                            </div>
-                            <hr>
-                            <% } %>
-                            <% if (locals.multiplierData.pointFiveX === true) { %>
-                            <div class="row">
-                                <div class="col-2">.5x</div>
-                                <div class="col-10">Types</div>
-                            </div>
-                            <hr>
-                            <% } %>
-                            <% if (locals.multiplierData.pointTwoFiveX === true) { %>
-                            <div class="row">
-                                <div class="col-2">.25x</div>
-                                <div class="col-10">Types</div>
-                            </div>
-                            <hr>
-                            <% } %>
-                            <% if (locals.multiplierData.zeroX === true) { %>
-                            <div class="row">
-                                <div class="col-2">0x</div>
-                                <div class="col-10">Types</div>
-                            </div>
-                            <hr>
-                            <% } %>
-                        <% } %>
-                        <% if (!locals.weaknessData) { %>
-                            <div></div>
-                            <% } %>
-                    </div>
-                </div>
-            </div>
-            <div class="col-2"></div>
-            </div>
+            <%- include("partials/form-card.ejs") %>
+            <%- include("partials/response-card.ejs") %>
+
+        </div>

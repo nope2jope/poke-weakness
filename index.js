@@ -26,21 +26,22 @@ const vulnerabilityTemplate = {
   steel: 1,
   water: 1,
 }
-const multiplierTemplate = {
-  fourX: false,
-  twoX: false,
-  oneX: false,
-  pointFiveX: false,
-  pointTwoFiveX: false,
-  zeroX: false,
-}
+const multiplierTemplate = [
+  {"4": false},
+  {"2": false},
+  {"1": false},
+  {".5": false},
+  {".25": false},
+  {"0": false},
+]
 
 function resetTemplates() {
   for (let key in vulnerabilityTemplate) {
     vulnerabilityTemplate[key] = 1;
   };
-  for (let key in multiplierTemplate) {
-    multiplierTemplate[key] = false;
+  for (let o in multiplierTemplate) {
+    for (let key in multiplierTemplate[o])
+    multiplierTemplate[o][key] = false;
   };
 };
 
@@ -125,22 +126,22 @@ function checkMultipliers(t, d) {
   for (let key in d) {
     switch (d[key]) {
       case 4:
-        template.fourX = true;
+        template[0]["4"] = true;
         break;
       case 2: 
-        template.twoX = true;
+        template[1]["2"] = true;
         break;
       case 1:
-        template.oneX = true;
+        template[2]["1"] = true;
         break;
       case .5:
-        template.pointFiveX = true;
+        template[3][".5"] = true;
         break;
       case .25: 
-        template.pointTwoFiveX = true;
+        template[4][".25"] = true;
         break;
       case 0:
-        template.zeroX = true;
+        template[5]["0"] = true;
         break;
       }
   }
