@@ -178,9 +178,10 @@ app.post("/", async (req, res) => {
     });
 
   } catch (error) {
-    console.error("Failed to make request:", error.message);
+    console.error("Failed to make request:", error.message); 
     res.render("index.ejs", {
-      error: error.message,
+      errorMessage: error.message,
+      errorStatus: error.response.status
     });
   }
 });

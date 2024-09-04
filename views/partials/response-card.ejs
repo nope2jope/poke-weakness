@@ -1,0 +1,31 @@
+<% if (locals.weaknessData) { %>
+    <div class="col-6">
+        <div class="card center <%= locals.typeData.pTypes.pTypeTwo ? locals.typeData.pTypes.pTypeTwo : typeData.pTypes.pTypeOne %>">
+            <div class="row">
+            <div class="card-header-2">
+                <h4>Type match-ups against <%= typeData.pName.toUpperCase() %></h4>
+            </div>
+        </div>
+
+            <div class="card-body">
+            <% for (let o in locals.multiplierData) { %>
+                <% for (let key in locals.multiplierData[o]) { %>
+                    <% if (locals.multiplierData[o][key]===true) { %>
+                        <hr>
+                    <div class="row">
+                        <div class="">
+                            <h4><%= key %>X</h4>
+                        </div>
+                        <div class="types-container">
+                            <% for (x in locals.weaknessData) { %>
+                                <% if (locals.weaknessData[x]===parseFloat(key)) { %>
+                                    <img class="type-icon" src=<%=`assets/${x}-type.png`%>>
+                                    <% }} %>
+                        </div>
+                    </div>
+                    <% }}} %>
+                </div>
+                <div class="card-footer"><p></p></div>
+    </div>
+    </div>
+    <% } %>

@@ -1,0 +1,64 @@
+<% if (!locals.typeData) { %>
+    <div class="col-3"></div>
+    <% } %>
+        <div class="col-6 center">
+            <div class="card center <%= locals.typeData ? locals.typeData.pTypes.pTypeOne : 'normal' %>">
+                <div class="row">
+                    <div class="card-header">
+                        <h4>What are my weaknesses?</h4>
+                        <form class="search-bar" action="/" method="POST">
+                            <input type="text" name="pokemonName" placeholder="ex. Bulbasaur">
+                            <input type="submit" value="Search">
+                            <% if (locals.errorMessage) { %>
+                                <% if (locals.errorStatus===404) { %>
+                                    <p class="error-message">error: please enter a valid pokemon</p>
+                                    <% } else { %>
+                                        <p class="error-message">
+                                            <%= errorMessage %>
+                                        </p>
+                                        <% }} %>
+                        </form>
+
+                    </div>
+                </div>
+                <div class="card-body">
+                    <% if (!locals.typeData) { %>
+                        <div class="row">
+                            <img class="card-img"
+                                src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/132.png">
+                        </div>
+                        <% } %>
+                            <% if (locals.typeData) { %>
+                                <div class="row">
+                                    <img src=<%=typeData.pSprite %> class="card-img" alt="<%= typeData.pName.charAt(0).toUpperCase() + typeData.pName.slice(1) %>">
+                                </div>
+                                <% } %>
+                </div>
+
+
+                <div class="card-footer">
+                    <div class="row">
+
+                        <% if (!locals.weaknessData) { %>
+                            <h5>Please enter a pokemon to search.</h5>
+                            <% } %>
+                                <% if (locals.typeData) { %>
+                                    <div>
+                                        <h4 class="pokemon-name-type">
+                                            <%= typeData.pName.toUpperCase() %>'s type is:
+                                        </h4>
+                                        <img class="type-icon poke-type-icon" src=<%=`assets/${typeData.pTypes.pTypeOne}-type.png`%>>
+                                        <% if (locals.typeData.pTypes.pTypeTwo !=="" ) { %>
+                                            <img class="type-icon poke-type-icon" src=<%=`assets/${typeData.pTypes.pTypeTwo}-type.png`
+                                                %>>
+                                            <% } %>
+                                    </div>
+                                    <% } %>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <% if (!locals.typeData) { %>
+            <div class="col-3"></div>
+            <% } %>
